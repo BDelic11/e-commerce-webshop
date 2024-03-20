@@ -1,5 +1,4 @@
-import LoginPageComponent from "@/pages/RegisterPageComponent";
-
+import LoginPageComponent from "@/pages/LoginPageComponent";
 export default function LoginPage() {
   return (
     <>
