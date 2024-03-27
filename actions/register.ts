@@ -14,7 +14,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     return { error: "Neispravan unos!" };
   }
 
-  const { username, email, password, name } = validatedFields.data;
+  const { username, email, password, name, surname } = validatedFields.data;
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const existingUser = await getUserByEmail(email);
@@ -26,6 +26,7 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
   await prismadb.user.create({
     data: {
       username,
+      surname,
       email,
       password: hashedPassword,
       name,

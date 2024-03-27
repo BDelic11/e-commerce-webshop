@@ -1,6 +1,12 @@
 /* An array of routes that are accessible to the public
     These routes do not require Authentification */
-export const publicRoutes = ["/"];
+export const publicRoutes = [
+  "/",
+  "/profile",
+  "/products",
+  "/products/:productId",
+  "/products(.*)",
+];
 
 /* An array of routes that are used for authentification
         They should be able to */

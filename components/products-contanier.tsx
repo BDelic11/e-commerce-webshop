@@ -1,7 +1,7 @@
 import React from "react";
 
 //actions
-import { getProducts } from "@/actions/getProducts";
+import { getProducts } from "@/actions/get-products";
 
 //components
 import ProductCard from "./product-card";

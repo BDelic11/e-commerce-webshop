@@ -65,6 +65,23 @@ const RegisterForm = () => {
             ></FormField>
             <FormField
               control={form.control}
+              name="surname"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Prezime</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="text"
+                      placeholder="Unesite prezime..."
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            ></FormField>
+            <FormField
+              control={form.control}
               name="username"
               render={({ field }) => (
                 <FormItem>

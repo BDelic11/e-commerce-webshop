@@ -18,6 +18,141 @@ enum UserRole {
   USER
 }
 
+enum ProductCategories {
+  PATULJAK
+  VIJENAC
+  OSTALO
+}
+
+enum OrderStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+// Adjusted and new models based on your dbdiagram...
+
+
+model User {
+  id            String              @id @default(cuid())
+  name          String
+  surname       String
+  email         String              @unique
+  emailVerified DateTime?
+  password      String
+  role          UserRole            @default(USER)
+  createdAt     DateTime            @default(now())
+  updateAt      DateTime            @updatedAt 
+  image         String?
+  username      String              @unique
+  accounts      Account[]
+  sessions      Session[]
+  reviews       Review[]
+  orders        Order[]
+  wishlists     Wishlist[]
+  payments      Payment[]
+  temporaryUserWallet  TemporaryUserWallet?
+}
+
+
+model Product {
+  id             String              @id @default(cuid())
+  name           String
+  category       ProductCategories
+  description    String
+  image          String
+  price          Float
+  onSale         Boolean            @default(false)
+  salePercentage Int?
+  salePrice      Int                @default(0)
+  saleStart      DateTime?
+  saleEnd        DateTime?
+  stock          Int
+  createdAt      DateTime           @default(now())
+  updateAt       DateTime           @updatedAt 
+  reviews        Review[]
+  orderItems     OrderItem[]
+  wishlistItems  WishlistItem[]
+}
+
+model Review {
+  id        String              @id @default(cuid())
+  product    Product   @relation(fields: [productId], references: [id])
+  user       User      @relation(fields: [userId], references: [id])
+  productId  String
+  userId     String
+  comment    String
+  rating     Int
+  createdAt  DateTime  @default(now())
+}
+
+model Order {
+  id          String              @id @default(cuid())
+  user        User        @relation(fields: [userId], references: [id])
+  userId      String
+  createdAt   DateTime    @default(now())
+  status      OrderStatus
+  totalPrice  Float
+  orderItems  OrderItem[]
+  payments    Payment[]
+}
+
+model OrderItem {
+  id              String              @id @default(cuid())
+  order           Order   @relation(fields: [orderId], references: [id])
+  orderId         String
+  product         Product @relation(fields: [productId], references: [id])
+  productId       String
+  quantity        Int
+  priceAtPurchase Float
+}
+
+model Wishlist {
+  id       String              @id @default(cuid())
+  user      User            @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime        @default(now())
+  items     WishlistItem[]
+}
+
+model WishlistItem {
+  id         String              @id @default(cuid())
+  wishlist    Wishlist  @relation(fields: [wishlistId], references: [id])
+  wishlistId  String
+  product     Product   @relation(fields: [productId], references: [id])
+  productId   String
+  addedAt     DateTime  @default(now())
+}
+
+model Payment {
+  id              String              @id @default(cuid())
+  order            Order         @relation(fields: [orderId], references: [id])
+  orderId          String
+  user             User          @relation(fields: [userId], references: [id])
+  userId           String
+  amount           Float
+  currency         String
+  status           PaymentStatus
+  stripePaymentId  String
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+}
+
+model TemporaryUserWallet {
+  id    String              @id @default(cuid())
+  user   User               @relation(fields: [userId], references: [id])
+  userId String             @unique
+  saldo  Float
+}
+
 model Account {
   id                 String  @id @default(cuid())
   userId             String
@@ -45,20 +180,6 @@ model Session {
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  username      String     @unique
-  password      String
-  createdAt     DateTime    @default(now())
-  updateAt      DateTime    @updatedAt 
-  accounts      Account[]
-  sessions      Session[]
-  role          UserRole  @default(USER)
-}
 
 model VerificationToken {
   identifier String
@@ -68,16 +189,3 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-
-model Product {
-  id          Int        @id @default(autoincrement())
-  description String     
-  imageUrl    String
-  stock       Int
-  price       Int
-  onSale      Boolean   @default(false)
-  salePrice   Int       @default(0)
-  name        String?    
-  createdAt   DateTime    @default(now())
-  updateAt    DateTime?    @updatedAt 
-}

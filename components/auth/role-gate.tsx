@@ -12,7 +12,12 @@ interface RoleGateProps {
 export const RoleGate = ({ children, allowedRole }: RoleGateProps) => {
   const role = useCurrentRole();
   if (role !== allowedRole) {
-    return <FormError message="Nemate dopustenje za ovu stranjicu" />;
+    return (
+      <>
+        {console.log(role)}
+        <FormError message="Nemate dopustenje za ovu stranjicu" />
+      </>
+    );
   }
 
   return <>{children}</>;

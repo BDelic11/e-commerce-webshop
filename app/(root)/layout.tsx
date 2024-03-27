@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Lato } from "next/font/google";
 
 import "../globals.css";
 
@@ -9,6 +9,7 @@ import { Footer } from "@/components/footer";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 
+// const lato = Lato({weight:["100	"], subsets: ["latin"]});
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
