@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 //schemas
 import { RegisterSchema } from "@/schemas";
+import { User } from "@/types/user";
 
 // components
 import CardWrapper from "./card-wrapper";
@@ -21,30 +22,32 @@ import {
 } from "@/components/ui/form";
 import { Button } from "../ui/button";
 import { register } from "@/actions/register";
+import { updateUser } from "@/actions/update-user-infp";
 
-const RegisterForm = () => {
+interface UpdateInfoFormProps {
+  data: User;
+}
+
+const UpdateInfoForm = ({ data }: UpdateInfoFormProps) => {
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
-      email: "",
-      password: "",
-      name: "",
-      surname: "",
-      username: "",
+      email: data?.email,
+      password: "********",
+      name: data?.name,
+      surname: data?.surname,
     },
   });
 
   const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
-    register(values);
+    updateUser(values, data?.email);
   };
 
   return (
     <CardWrapper
-      headerLabel="Register"
-      backButtonHref="/auth/login"
-      backButtonLabel="Imate korisnički račun?"
-      showSocial
-      classname=" p-6 border-hidden shadow-none md:p-12 md:shadow-lg md:border-solid md:py-0 md:w-1/3 "
+      headerLabel="Informacije o korisniku"
+      showSocial={false}
+      classname=" p-6 border-hidden shadow-none md:p-12 md:shadow-none lg:shadow-none md:py-0 md:w-2/3"
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -66,7 +69,7 @@ const RegisterForm = () => {
                 </FormItem>
               )}
             ></FormField>
-            <FormField
+            {/* <FormField
               control={form.control}
               name="surname"
               render={({ field }) => (
@@ -82,8 +85,8 @@ const RegisterForm = () => {
                   <FormMessage />
                 </FormItem>
               )}
-            ></FormField>
-            <FormField
+            ></FormField> */}
+            {/* <FormField
               control={form.control}
               name="username"
               render={({ field }) => (
@@ -99,8 +102,8 @@ const RegisterForm = () => {
                   <FormMessage />
                 </FormItem>
               )}
-            ></FormField>
-            <FormField
+            ></FormField> */}
+            {/* <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
@@ -133,15 +136,16 @@ const RegisterForm = () => {
                   <FormMessage />
                 </FormItem>
               )}
-            ></FormField>
+            ></FormField> */}
           </div>
           <Button variant="default" size="lg" type="submit" className="w-full">
-            Registriraj se
+            Spremi podatke
           </Button>
+          {data.email} {data.name}
         </form>
       </Form>
     </CardWrapper>
   );
 };
 
-export default RegisterForm;
+export default UpdateInfoForm;

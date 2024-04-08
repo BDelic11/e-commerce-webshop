@@ -1,21 +1,25 @@
 import React from "react";
 
-//actions
-import { getProducts } from "@/actions/get-products";
-
 //components
 import ProductCard from "./product-card";
+import { Product } from "@prisma/client";
 
-const ProductsContainer = async () => {
-  const products = await getProducts();
+interface ProductsContainerProps {
+  products: Product[];
+  toggleFilter: boolean;
+}
 
-  if (!products.products) {
-    return <p>Nema produkata</p>;
-  }
-
+const ProductsContainer = ({
+  products,
+  toggleFilter,
+}: ProductsContainerProps) => {
   return (
-    <section className=" bg-white grid grid-cols-2 gap-1 w-full py-6">
-      {products.products?.map((product) => (
+    <section
+      className={`${
+        toggleFilter ? "lg:pl-0" : ""
+      }  bg-white grid grid-cols-2 md:grid-cols-3 gap-1 md:gap-3 w-full h-full py-6 scroll-smooth md:px-24 lg:px-40 `}
+    >
+      {products?.map((product) => (
         <ProductCard key={product.id} product={product} />
       ))}
     </section>

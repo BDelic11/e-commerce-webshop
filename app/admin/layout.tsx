@@ -3,6 +3,7 @@ import { SessionProvider } from "next-auth/react";
 
 import "../globals.css";
 import AdminSidebar from "@/components/admin-sidebar";
+import ToastProvider from "@/providers/toast-provider";
 
 export const metadata = {
   title: "Next.js",
@@ -20,6 +21,7 @@ export default async function RootLayout({
     <SessionProvider session={session}>
       <html lang="en">
         <body className="md:flex md:flex-row ">
+          <ToastProvider />
           <AdminSidebar />
           {children}
         </body>

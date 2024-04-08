@@ -24,7 +24,9 @@ const OnSalePriceDisplay = ({
           </div>
         </div>
       ) : (
-        <p className="pt-2 font-bold">{formatPrice(originalPrice)}</p>
+        <p className="pt-2 font-bold md:text-2xl">
+          {formatPrice(originalPrice)}
+        </p>
       )}
     </div>
   );

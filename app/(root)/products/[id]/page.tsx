@@ -1,9 +1,13 @@
 import SingleProductPageComponent from "@/pages/client/SingleProductPageComponent";
 
-export default function SingleProductPage() {
+export default function SingleProductPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   return (
     <>
-      <SingleProductPageComponent />
+      <SingleProductPageComponent productId={params.id} />
     </>
   );
 }

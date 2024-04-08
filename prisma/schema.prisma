@@ -31,6 +31,12 @@ enum OrderStatus {
   CANCELLED
 }
 
+enum CartStatus {
+  ACTIVE 
+  COMPLETED 
+  ABANDONED
+}
+
 enum PaymentStatus {
   PENDING
   COMPLETED
@@ -50,16 +56,18 @@ model User {
   password      String
   role          UserRole            @default(USER)
   createdAt     DateTime            @default(now())
-  updateAt      DateTime            @updatedAt 
+  updateAt      DateTime?           @updatedAt 
   image         String?
   username      String              @unique
   accounts      Account[]
   sessions      Session[]
   reviews       Review[]
-  orders        Order[]
-  wishlists     Wishlist[]
-  payments      Payment[]
+  cart          Cart?
+  // orders        Order[]
+  // wishlists     Wishlist[]
+  // payments      Payment[]
   temporaryUserWallet  TemporaryUserWallet?
+
 }
 
 
@@ -72,19 +80,22 @@ model Product {
   price          Float
   onSale         Boolean            @default(false)
   salePercentage Int?
-  salePrice      Int                @default(0)
+  salePrice      Int?              @default(0)
   saleStart      DateTime?
   saleEnd        DateTime?
   stock          Int
   createdAt      DateTime           @default(now())
   updateAt       DateTime           @updatedAt 
   reviews        Review[]
-  orderItems     OrderItem[]
-  wishlistItems  WishlistItem[]
+  // orderItems     OrderItem[]
+  // wishlistItems  WishlistItem[]
+  cartItems      CartItem[]
+
+  
 }
 
 model Review {
-  id        String              @id @default(cuid())
+  id        String          @id @default(cuid())
   product    Product   @relation(fields: [productId], references: [id])
   user       User      @relation(fields: [userId], references: [id])
   productId  String
@@ -92,59 +103,86 @@ model Review {
   comment    String
   rating     Int
   createdAt  DateTime  @default(now())
+
+  
 }
 
-model Order {
-  id          String              @id @default(cuid())
-  user        User        @relation(fields: [userId], references: [id])
-  userId      String
-  createdAt   DateTime    @default(now())
-  status      OrderStatus
-  totalPrice  Float
-  orderItems  OrderItem[]
-  payments    Payment[]
-}
+// model Order {
+//   id          String              @id @default(cuid())
+//   user        User        @relation(fields: [userId], references: [id])
+//   userId      String
+//   createdAt   DateTime    @default(now())
+//   status      OrderStatus
+//   totalPrice  Float
+//   orderItems  OrderItem[]
+//   payments    Payment[]
+// }
 
-model OrderItem {
-  id              String              @id @default(cuid())
-  order           Order   @relation(fields: [orderId], references: [id])
-  orderId         String
-  product         Product @relation(fields: [productId], references: [id])
-  productId       String
-  quantity        Int
-  priceAtPurchase Float
-}
+// model OrderItem {
+//   id              String              @id @default(cuid())
+//   order           Order   @relation(fields: [orderId], references: [id])
+//   orderId         String
+//   product         Product @relation(fields: [productId], references: [id])
+//   productId       String
+//   quantity        Int
+//   priceAtPurchase Float
+// }
 
-model Wishlist {
-  id       String              @id @default(cuid())
-  user      User            @relation(fields: [userId], references: [id])
-  userId    String
+model Cart{
+  id        String          @id @default(cuid())
+  userId    String?         @unique
+  user      User?           @relation(fields: [userId], references: [id])
   createdAt DateTime        @default(now())
-  items     WishlistItem[]
+  updatedAt DateTime        @default(now())
+  items     CartItem[]
+  status    CartStatus      @default(ACTIVE)
+
+
 }
 
-model WishlistItem {
-  id         String              @id @default(cuid())
-  wishlist    Wishlist  @relation(fields: [wishlistId], references: [id])
-  wishlistId  String
-  product     Product   @relation(fields: [productId], references: [id])
+model CartItem {
+  id          String              @id @default(cuid())
+  cart        Cart                @relation(fields: [cartId], references: [id])
+  cartId      String
+  product     Product             @relation(fields: [productId], references: [id], onDelete: Cascade)
   productId   String
-  addedAt     DateTime  @default(now())
+  addedAt     DateTime            @default(now())
+  quantity    Int
+  price       Float
+  color       String
+
 }
 
-model Payment {
-  id              String              @id @default(cuid())
-  order            Order         @relation(fields: [orderId], references: [id])
-  orderId          String
-  user             User          @relation(fields: [userId], references: [id])
-  userId           String
-  amount           Float
-  currency         String
-  status           PaymentStatus
-  stripePaymentId  String
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-}
+// model Wishlist {
+//   id       String              @id @default(cuid())
+//   user      User            @relation(fields: [userId], references: [id])
+//   userId    String
+//   createdAt DateTime        @default(now())
+//   items     WishlistItem[]
+// }
+
+// model WishlistItem {
+//   id         String              @id @default(cuid())
+//   wishlist    Wishlist  @relation(fields: [wishlistId], references: [id])
+//   wishlistId  String
+//   product     Product   @relation(fields: [productId], references: [id])
+//   productId   String
+//   addedAt     DateTime  @default(now())
+// }
+
+// model Payment {
+//   id              String              @id @default(cuid())
+//   order            Order         @relation(fields: [orderId], references: [id])
+//   orderId          String
+//   user             User          @relation(fields: [userId], references: [id])
+//   userId           String
+//   amount           Float
+//   currency         String
+//   status           PaymentStatus
+//   stripePaymentId  String
+//   createdAt        DateTime      @default(now())
+//   updatedAt        DateTime      @updatedAt
+// }
 
 model TemporaryUserWallet {
   id    String              @id @default(cuid())

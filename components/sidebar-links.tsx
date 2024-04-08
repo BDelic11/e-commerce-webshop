@@ -39,7 +39,7 @@ const SidebarLinks = () => {
           key={link.id}
           className={`${
             pathname === link.href ? "md:bg-activeButton" : ""
-          } cursor-pointer  md:w-full md:py-2 md:pl-2 md:hover:bg-hoverButton md:hover:duration-300 md:rounded-lg `}
+          } cursor-pointer  md:w-full md:py-2 md:pl-2 md:hover:bg-lighterDarkBackground md:hover:duration-300 md:rounded-lg `}
         >
           <Link
             className="md:flex md:flex-row md:justify-start md:align-middle md:gap-2"

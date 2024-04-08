@@ -13,8 +13,8 @@ import Modal from "@/components/ui/modal";
 
 const AdminPageComponent = async () => {
   return (
-    <main className="md:absolute md:right-0 md:w-4/5 md:flex md:flex-col md:gap-5  md:p-4">
-      <div className="md:flex md:flex-row md:gap-5  ">
+    <main className="flex flex-col gap-2 p-4 md:absolute md:right-0 md:w-4/5 md:flex md:flex-col md:gap-5  md:p-4">
+      <div className="flex flex-col gap-2 md:flex md:flex-row md:gap-5 ">
         <AdminOverviewCard
           label="Total revenue"
           price

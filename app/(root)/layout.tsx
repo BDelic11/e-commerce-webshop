@@ -8,6 +8,7 @@ import { Footer } from "@/components/footer";
 
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
+import ToastProvider from "@/providers/toast-provider";
 
 // const lato = Lato({weight:["100	"], subsets: ["latin"]});
 const inter = Inter({ subsets: ["latin"] });
@@ -30,6 +31,7 @@ export default async function RootLayout({
       <html lang="en">
         <body className={inter.className}>
           {" "}
+          <ToastProvider />
           <Navbar />
           {children}
           <Footer />

@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 
 //icons
 import cart from "@/public/icons/cartIcon.svg";
@@ -13,34 +14,107 @@ const rightIcons = [
     id: 1,
     icon: heart,
     linkTo: "/",
+    classname: "",
   },
   {
     id: 2,
     icon: cart,
     linkTo: "/",
+    classname: "",
   },
   {
     id: 3,
     icon: user,
-    linkTo: "/",
+    linkTo: "/profile",
+    classname: "",
   },
   {
     id: 4,
     icon: hamburger,
     linkTo: "/",
+    classname: "md:hidden",
+  },
+];
+
+const desktopIcons = [
+  {
+    id: 1,
+    label: "New & Featured",
+    linkTo: "/",
+    classname: "",
+  },
+  {
+    id: 2,
+    label: "Božicno",
+    linkTo: "/products/christmas",
+    classname: "",
+  },
+  {
+    id: 3,
+    label: "Uskrs",
+    linkTo: "/products/easter",
+    classname: "",
+  },
+  {
+    id: 4,
+    label: "Popust",
+    linkTo: "/",
+    classname: "",
   },
 ];
 
 export const Navbar = () => {
+  const initialNavbarClass =
+    "sticky top-0 flex flex-row justify-between items-center w-auto h-16  mx-4 mt-6 p-4 bg-softGreen rounded-xl md:h-20";
+
+  const stickyNavbarClass =
+    "sticky top-0 flex flex-row justify-between items-center w-full h-16  p-4 bg-softGreen rounded-none md:h-20 ";
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY >= 0) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   return (
-    <nav className=" flex flex-row justify-between align-middle w-auto h-14 h-13 mx-6 mt-6 p-4 bg-softGreen rounded-xl">
-      {/* <IconLink linkTo={"/"} icon={logo} /> */}
-      <h1 className="text-white font-bold">Icon</h1>
-      <div className="flex flex-row gap-2">
-        {rightIcons.map((icon) => (
-          <IconLink key={icon.id} linkTo={icon.linkTo} icon={icon.icon} />
+    <nav
+      className={`${
+        isSticky ? stickyNavbarClass : initialNavbarClass
+      } duration-100 delay-75 z-10 md:px-20 `}
+    >
+      <IconLink icon={heart} linkTo="/" />
+
+      <ul className="hidden md:flex flex-row gap-3 md:gap-6 lg:gap-5 my-auto ">
+        {desktopIcons.map((icon) => (
+          <IconLink
+            underline
+            key={icon.id}
+            classname={icon.classname}
+            linkTo={icon.linkTo}
+            label={icon.label}
+          />
         ))}
-      </div>
+      </ul>
+
+      <ul className="flex flex-row gap-4 md:gap-4 lg:gap-5 my-auto">
+        {rightIcons.map((icon) => (
+          <IconLink
+            hover
+            key={icon.id}
+            classname={icon.classname}
+            linkTo={icon.linkTo}
+            icon={icon.icon}
+          />
+        ))}
+      </ul>
     </nav>
   );
 };

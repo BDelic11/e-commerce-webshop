@@ -15,7 +15,7 @@ export default async function LandingPageComponent() {
   //   return <h1>error</h1>;
   // }
   return (
-    <main>
+    <main className="h-screen">
       <h1>Hello landing page</h1>
       <h2>{JSON.stringify(user)}</h2>
       <ul>

@@ -19,6 +19,7 @@ const config = {
     },
     extend: {
       colors: {
+        navbarTextColor: "white",
         activeButton: "#3A3A3C",
         hoverButton: "#48484A",
         borders: "#424245",
@@ -27,6 +28,7 @@ const config = {
         creamBackground: "#",
         accentRed: "#C44536",
         softGreen: "#77966D",
+        hoverSoftGreen: "#5d7a5a",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

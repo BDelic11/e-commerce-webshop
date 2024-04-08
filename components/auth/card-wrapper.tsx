@@ -16,9 +16,10 @@ interface CardWrapperProps {
   children: React.ReactNode;
   headerLabel: string;
   cardDescription?: string;
-  backButtonLabel: string;
-  backButtonHref: string;
+  backButtonLabel?: string;
+  backButtonHref?: string;
   showSocial?: boolean;
+  classname?: string;
 }
 
 const CardWrapper = ({
@@ -28,9 +29,10 @@ const CardWrapper = ({
   backButtonHref,
   backButtonLabel,
   showSocial,
+  classname,
 }: CardWrapperProps) => {
   return (
-    <Card className=" w-1/4">
+    <Card className={`${classname} w-full  md:shadow-lg `}>
       <CardHeader>
         <CardTitle className=" text-center py-4">{headerLabel}</CardTitle>
         <CardDescription>{cardDescription}</CardDescription>
@@ -42,7 +44,14 @@ const CardWrapper = ({
         </CardFooter>
       )}
       <CardFooter>
-        <BackButton label={backButtonLabel} href={backButtonHref}></BackButton>
+        {backButtonLabel && backButtonHref ? (
+          <BackButton
+            label={backButtonLabel}
+            href={backButtonHref}
+          ></BackButton>
+        ) : (
+          ""
+        )}
       </CardFooter>
     </Card>
   );

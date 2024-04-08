@@ -53,12 +53,13 @@ const LoginForm = () => {
     <CardWrapper
       headerLabel="Login"
       backButtonHref="/auth/register"
-      backButtonLabel="Don't have an account?"
+      backButtonLabel="Nemate korisnički račun?"
       showSocial
+      classname="p-4 border-hidden shadow-none md:p-4 md:shadow-lg md:border-solid md:w-1/4"
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)}>
-          <div className="space-y-4 mb-8">
+          <div className="space-y-4 mb-8 ">
             <FormField
               control={form.control}
               name="email"

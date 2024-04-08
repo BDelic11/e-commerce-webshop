@@ -25,12 +25,10 @@ const AdminOverviewCard = ({
 }: AdminOverviewCardProps) => {
   return (
     <section>
-      <Card className="md:w-72 md:p-4 md:m-auto shadow-md">
+      <Card className="w-11/12 p-4 m-auto md:w-72 md:p-4 shadow-md">
         <CardContent>
-          <div className="md:flex md:flex-row md:justify-between md:align-middle">
-            <p className="md:font-medium text-base text-gray-800 pb-2">
-              {label}
-            </p>
+          <div className="flex flex-row justify-between align-middle">
+            <p className="font-medium text-base text-gray-800 pb-2">{label}</p>
             <Image
               className="bg-black w-6 h-6 rounded-full"
               src={icon}
@@ -40,11 +38,11 @@ const AdminOverviewCard = ({
             />
           </div>
           <div>
-            <h2 className="md:font-bold md:text-lg">
+            <h2 className="font-bold text-lg">
               {price ? "€" : ""} {amount}
             </h2>
             {/* TODO ADD BADGE FOR + OR - (RED OR GREEN) IF SALES ARE UP OR DOWN FROM LAST MONTH */}
-            <p className="md:text-sm md:text-gray-500">+20% from last month</p>
+            <p className="text-sm text-gray-500">+20% from last month</p>
           </div>
         </CardContent>
       </Card>

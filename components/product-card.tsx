@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 //types
-import { Product } from "@/types/product";
+import { Product } from "@prisma/client";
 
 //images
 import testImage from "@/public/images/primjer patuljka jpeg.jpg";
@@ -19,19 +19,19 @@ interface ProductCardProps {
 
 const ProductCard = ({ product }: ProductCardProps) => {
   return (
-    <article className="relative bg-white flex flex-col justify-start align-top w-full h-72 rounded-xl ">
-      <Link href={`products/${product?.id}?id=${product?.id}`}>
+    <article className="relative bg-white flex flex-col justify-start align-top w-full h-full rounded-xl py-4 md:hover:opacity-90  md:duration-300 ">
+      <Link href={`products/${product?.id}`}>
         {product?.stock ? (
-          <>
+          <div className=" md:h-96">
             <Image
-              className="relative w-full h-2/3 object-cover "
+              className="relative w-full h-48 md:h-full object-cover "
               src={svf}
               width={28}
               height={28}
               alt="product image"
               priority
             />
-            <div className="absolute top-0 right-0 ">
+            <div className="absolute top-1 right-1 ">
               {product?.onSale ? (
                 <Badge
                   className="text-red-800 bg-white border-red-800"
@@ -43,11 +43,11 @@ const ProductCard = ({ product }: ProductCardProps) => {
                 <></>
               )}
             </div>
-          </>
+          </div>
         ) : (
           <>
             <Image
-              className="relative w-full h-2/3 object-cover opacity-30 "
+              className="relative w-full  h-48 md:h-full object-cover opacity-30 "
               src={svf}
               width={28}
               height={28}
@@ -69,16 +69,16 @@ const ProductCard = ({ product }: ProductCardProps) => {
           </>
         )}
 
-        <div className="w-full h-24 pt-4 pb-2 px-3">
+        <div className="w-full h-24 pt-4 pb-2 px-2 md:px-3">
           {product?.stock ? (
             <>
-              <h3 className=" text-lg font-medium ">{product?.name}</h3>
+              <h3 className=" text-base font-medium pb-1 ">{product?.name}</h3>
               {/* {
                 TODO CHECK IF PRODUCT IS NEWLY ADDED TO DISPLAY "NEW" BADGE
                 product.createdAt
               } */}
 
-              <p className=" text-sm text-gray-500">{product?.category}</p>
+              <p className=" text-xs text-gray-500">{product?.category}</p>
               <div className="text-md font-bold py-2">
                 {product?.salePrice ? (
                   <div className="flex flex-row gap-2 text-md font-bold py-2">
