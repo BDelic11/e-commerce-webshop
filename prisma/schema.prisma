@@ -13,25 +13,220 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id          Int        @id @default(autoincrement())
-  email       String     @unique
-  username    String     @unique
-  password    String
-  name        String?    
-  createdAt   DateTime    @default(now())
-  updateAt    DateTime    @updatedAt 
+enum UserRole {
+  ADMIN
+  USER
 }
 
-model Product {
-  id          Int        @id @default(autoincrement())
-  description String     
-  imageUrl    String
-  stock       Int
-  price       Int
-  onSale      Boolean   @default(false)
-  salePrice   Int       @default(0)
-  name        String?    
-  createdAt   DateTime    @default(now())
-  updateAt    DateTime?    @updatedAt 
+enum ProductCategories {
+  PATULJAK
+  VIJENAC
+  OSTALO
 }
+
+enum OrderStatus {
+  PENDING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
+enum CartStatus {
+  ACTIVE 
+  COMPLETED 
+  ABANDONED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+// Adjusted and new models based on your dbdiagram...
+  // wishlists     Wishlist[]
+  // payments      Payment[]
+
+model User {
+  id            String              @id @default(cuid())
+  name          String
+  surname       String
+  email         String              @unique
+  emailVerified DateTime?
+  password      String
+  role          UserRole            @default(USER)
+  createdAt     DateTime            @default(now())
+  updateAt      DateTime?           @updatedAt 
+  image         String?
+  username      String              @unique
+  accounts      Account[]
+  sessions      Session[]
+  reviews       Review[]
+  cart          Cart?
+  orders        Order[]
+  temporaryUserWallet  TemporaryUserWallet[]
+  // ADDITIONAL INFO 
+  city              String?
+  country           String?
+  postalCode        String?
+  phoneNumber       String?       @unique
+  address           String?
+}
+
+
+model Product {
+  id             String              @id @default(cuid())
+  name           String
+  category       ProductCategories
+  description    String
+  image          String
+  price          Float
+  onSale         Boolean            @default(false)
+  salePercentage Int?
+  salePrice      Int?              @default(0)
+  saleStart      DateTime?
+  saleEnd        DateTime?
+  stock          Int
+  createdAt      DateTime           @default(now())
+  updateAt       DateTime           @updatedAt 
+  reviews        Review[]
+  orderItems     OrderItem[]
+  cartItems      CartItem[]
+
+  
+}
+
+model Order {
+  id          String              @id @default(cuid())
+  user        User        @relation(fields: [userId], references: [id])
+  userId      String
+  createdAt   DateTime    @default(now())
+  totalPrice  Float
+  orderItems  OrderItem[]
+}
+
+model OrderItem {
+  id              String              @id @default(cuid())
+  order           Order   @relation(fields: [orderId], references: [id])
+  orderId         String
+  product         Product @relation(fields: [productId], references: [id])
+  productId       String
+  quantity        Int
+  priceAtPurchase Float
+}
+
+model Review {
+  id        String          @id @default(cuid())
+  product    Product   @relation(fields: [productId], references: [id])
+  user       User      @relation(fields: [userId], references: [id])
+  productId  String
+  userId     String
+  comment    String
+  rating     Int
+  createdAt  DateTime  @default(now())
+
+  
+}
+
+
+
+model Cart{
+  id        String          @id @default(cuid())
+  userId    String?         @unique
+  user      User?           @relation(fields: [userId], references: [id])
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @default(now())
+  items     CartItem[]
+  status    CartStatus      @default(ACTIVE)
+
+
+}
+
+model CartItem {
+  id          String              @id @default(cuid())
+  cart        Cart                @relation(fields: [cartId], references: [id])
+  cartId      String
+  product     Product             @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId   String
+  addedAt     DateTime            @default(now())
+  quantity    Int
+  price       Float
+  color       String
+
+}
+
+// model Wishlist {
+//   id       String              @id @default(cuid())
+//   user      User            @relation(fields: [userId], references: [id])
+//   userId    String
+//   createdAt DateTime        @default(now())
+//   items     WishlistItem[]
+// }
+
+// model WishlistItem {
+//   id         String              @id @default(cuid())
+//   wishlist    Wishlist  @relation(fields: [wishlistId], references: [id])
+//   wishlistId  String
+//   product     Product   @relation(fields: [productId], references: [id])
+//   productId   String
+//   addedAt     DateTime  @default(now())
+// }
+
+// model Payment {
+//   id              String              @id @default(cuid())
+//   order            Order         @relation(fields: [orderId], references: [id])
+//   orderId          String
+//   user             User          @relation(fields: [userId], references: [id])
+//   userId           String
+//   amount           Float
+//   currency         String
+//   status           PaymentStatus
+//   stripePaymentId  String
+//   createdAt        DateTime      @default(now())
+//   updatedAt        DateTime      @updatedAt
+// }
+
+model TemporaryUserWallet {
+  id    String              @id @default(cuid())
+  user   User               @relation(fields: [userId], references: [id])
+  userId String             @unique
+  saldo  Float       
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String
+  type               String
+  provider           String
+  providerAccountId  String
+  refresh_token      String?  @db.Text
+  access_token       String?  @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String?  @db.Text
+  session_state      String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+

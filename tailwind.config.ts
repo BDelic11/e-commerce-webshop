@@ -18,7 +18,22 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        lora: ["var(--font-lora)"],
+        roboto_slab: ["var(--font-roboto_slab)"],
+      },
       colors: {
+        landingBackground: "#F4EDE4",
+        navbarTextColor: "white",
+        activeButton: "#3A3A3C",
+        hoverButton: "#48484A",
+        borders: "#424245",
+        darkBackground: "#1C1C1E",
+        lighterDarkBackground: "#2C2C2E",
+        creamBackground: "#",
+        accentRed: "#C44536",
+        softGreen: "#77966D",
+        hoverSoftGreen: "#5d7a5a",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

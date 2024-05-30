@@ -1,5 +1,4 @@
-import LandingPageComponent from "@/pages/LandingPageComponent";
-import RegisterPageComponent from "@/pages/LoginPageComponent copy";
+import RegisterPageComponent from "@/pages/auth/RegisterPageComponent";
 
 export default function RegisterPage() {
   return (
