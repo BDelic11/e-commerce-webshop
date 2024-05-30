@@ -11,7 +11,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { deleteProduct } from "@/actions/delete-product";
 
 interface CustomAlertDialogProps {
   children: React.ReactNode;

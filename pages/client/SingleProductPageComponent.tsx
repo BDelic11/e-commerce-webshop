@@ -115,13 +115,13 @@ const SingleProductPageComponent = async ({
               height={30}
             />
           </div>
-          <div className="flex flex-col justify-center align-middle gap-2 my-6 md:mt-20 w-full">
+          <div className="flex flex-col justify-center align-middle gap-2 my-6 md:mt-20  w-full">
             <AddToCartButton
               productId={productId}
-              price={product.price}
+              price={product.salePrice ? product.salePrice : product.price}
               color={"red"}
             />
-            <Button className="m-auto w-10/12 " variant="outline">
+            <Button className="  w-10/12 " variant="outline">
               Dodaj u favorite
             </Button>
           </div>

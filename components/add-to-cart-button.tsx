@@ -17,7 +17,7 @@ const AddToCartButton = ({ productId, price, color }: AddToCartButtonProps) => {
   return (
     <>
       <Button
-        className=""
+        className=" w-10/12"
         onClick={() => {
           setSuccess(false);
           startTransition(async () => {

@@ -45,7 +45,8 @@ enum PaymentStatus {
 }
 
 // Adjusted and new models based on your dbdiagram...
-
+  // wishlists     Wishlist[]
+  // payments      Payment[]
 
 model User {
   id            String              @id @default(cuid())
@@ -63,11 +64,14 @@ model User {
   sessions      Session[]
   reviews       Review[]
   cart          Cart?
-  // orders        Order[]
-  // wishlists     Wishlist[]
-  // payments      Payment[]
-  temporaryUserWallet  TemporaryUserWallet?
-
+  orders        Order[]
+  temporaryUserWallet  TemporaryUserWallet[]
+  // ADDITIONAL INFO 
+  city              String?
+  country           String?
+  postalCode        String?
+  phoneNumber       String?       @unique
+  address           String?
 }
 
 
@@ -87,11 +91,29 @@ model Product {
   createdAt      DateTime           @default(now())
   updateAt       DateTime           @updatedAt 
   reviews        Review[]
-  // orderItems     OrderItem[]
-  // wishlistItems  WishlistItem[]
+  orderItems     OrderItem[]
   cartItems      CartItem[]
 
   
+}
+
+model Order {
+  id          String              @id @default(cuid())
+  user        User        @relation(fields: [userId], references: [id])
+  userId      String
+  createdAt   DateTime    @default(now())
+  totalPrice  Float
+  orderItems  OrderItem[]
+}
+
+model OrderItem {
+  id              String              @id @default(cuid())
+  order           Order   @relation(fields: [orderId], references: [id])
+  orderId         String
+  product         Product @relation(fields: [productId], references: [id])
+  productId       String
+  quantity        Int
+  priceAtPurchase Float
 }
 
 model Review {
@@ -107,26 +129,7 @@ model Review {
   
 }
 
-// model Order {
-//   id          String              @id @default(cuid())
-//   user        User        @relation(fields: [userId], references: [id])
-//   userId      String
-//   createdAt   DateTime    @default(now())
-//   status      OrderStatus
-//   totalPrice  Float
-//   orderItems  OrderItem[]
-//   payments    Payment[]
-// }
 
-// model OrderItem {
-//   id              String              @id @default(cuid())
-//   order           Order   @relation(fields: [orderId], references: [id])
-//   orderId         String
-//   product         Product @relation(fields: [productId], references: [id])
-//   productId       String
-//   quantity        Int
-//   priceAtPurchase Float
-// }
 
 model Cart{
   id        String          @id @default(cuid())
@@ -188,7 +191,7 @@ model TemporaryUserWallet {
   id    String              @id @default(cuid())
   user   User               @relation(fields: [userId], references: [id])
   userId String             @unique
-  saldo  Float
+  saldo  Float       
 }
 
 model Account {

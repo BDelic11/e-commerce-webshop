@@ -12,7 +12,7 @@ export async function deleteProduct(id: string) {
 
     revalidatePath("/products");
     revalidatePath("/admin/products");
-    return { product };
+    return { success: "Obrisali ste produkt" };
   } catch (error) {
     return { error };
   }

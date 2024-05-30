@@ -7,6 +7,7 @@ import { LoginSchema } from "@/schemas";
 import { signIn } from "@/auth";
 import { DEFAULT_USER_LOGIN_REDIRECT } from "@/routes";
 import { AuthError } from "next-auth";
+import { revalidatePath } from "next/cache";
 
 export const login = async (values: z.infer<typeof LoginSchema>) => {
   const validatedFields = LoginSchema.safeParse(values);
@@ -33,6 +34,7 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
           return { error: "Nešto je pošlo po krivu!" };
       }
     }
+    // revalidatePath("/", "page");   ----> { TODO: NADI KAKO REVALIDATEAT NAKON REGISTERA , ONDA LOGIN UDE I REVALIDATEA "/"}
     // return { success: "Uspješna prijava" };
     throw error;
   }

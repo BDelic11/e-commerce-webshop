@@ -24,7 +24,6 @@ export const updateProduct = async (
     data: {
       name,
       description,
-      category,
       price,
       image,
       stock,

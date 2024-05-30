@@ -9,6 +9,7 @@ interface IconLinkProps {
   icon?: StaticImageData;
   label?: string;
   classname?: string;
+  cart?: boolean;
 }
 
 const IconLink = ({
@@ -18,6 +19,7 @@ const IconLink = ({
   icon,
   classname,
   label,
+  cart,
 }: IconLinkProps) => {
   return (
     <Link
@@ -33,17 +35,22 @@ const IconLink = ({
        ${classname} md:p-1  `}
     >
       {icon ? (
-        <li className=" list-none">
+        <li className="relative list-none">
+          {cart ? (
+            <div className=" w-2 h-2 absolute right-0 top-0 rounded-full bg-red-500"></div>
+          ) : (
+            <></>
+          )}
           <Image
             src={icon}
             alt="Link icon"
-            className="w-6 h-6 text-red-100 md:w-7 md:h-7"
+            className="w-6 h-6 text-red-100 md:w-7 md:h-7 relative"
             // width={24}
             // height={24}
           />
         </li>
       ) : (
-        <li className="text-navbarTextColor font-bold">{label}</li>
+        <li className="text-navbarTextColor font-light">{label}</li>
       )}
     </Link>
   );

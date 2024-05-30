@@ -22,6 +22,10 @@ export const {
 
       if (token.role && session.user) {
         session.user.role = token.role as UserRole;
+        // session.user.address = token.address as string;
+        // session.user.city = token.city as string;
+        // session.user.country = token.address as string;
+        // session.user.postalCode = token.address as string;
       }
 
       return session;

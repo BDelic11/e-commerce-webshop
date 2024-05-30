@@ -1,3 +1,4 @@
+"use server";
 import { auth } from "@/auth";
 import { currentUser } from "@/lib/auth";
 import prismadb from "@/lib/prismadb";
@@ -30,9 +31,7 @@ export type ShoppingCart = CartWithProducts & {
 
 export async function getCart(): Promise<ShoppingCart | null> {
   const user = await currentUser();
-  {
-    console.log(user);
-  }
+
   let cart: CartWithProducts | null = null;
 
   if (user) {
@@ -74,7 +73,12 @@ export async function getCart(): Promise<ShoppingCart | null> {
     ...cart,
     size: cart.items.reduce((acc, item) => acc + item.quantity, 0),
     subtotal: cart.items.reduce(
-      (acc, item) => acc + item.quantity * item.product.price,
+      (acc, item) =>
+        acc +
+        item.quantity *
+          (item.product.salePrice
+            ? item.product.salePrice
+            : item.product.price),
       0
     ),
   };

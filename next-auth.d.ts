@@ -3,6 +3,11 @@ import { UserRole } from "@prisma/client";
 
 export type ExtendedUser = DefaultSession["user"] & {
   role: UserRole;
+  // address: string;
+  // mobileNumber: string;
+  // city: string;
+  // country: string;
+  // postalCode: string;
 };
 declare module "next-auth" {
   interface Session {

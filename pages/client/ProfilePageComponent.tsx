@@ -6,11 +6,13 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import LogoutButton from "@/components/auth/logout-button";
 import UpdateInfoForm from "@/components/auth/update-info";
+import { getUserBalance } from "@/actions/user";
+import { formatPrice } from "@/lib/format-price";
 
 const ProfilePageComponent = async () => {
   const user = await currentUser();
 
-  if (!user || user === undefined) {
+  if (!user) {
     return (
       <main>
         <Link
@@ -28,16 +30,25 @@ const ProfilePageComponent = async () => {
       </main>
     );
   }
+  const { data, error } = await getUserBalance(user?.id);
 
   return (
     <main className="flex flex-col justify-center align-middle md:flex-row md:w-full md:h-full md:my-auto md:px-24">
-      <aside className="flex flex-col w-full text-left md:text-center md:w-1/5 md:h-full md:m-auto md:gap-6 pt-10 px-6">
+      <aside className="flex flex-col w-full text-left md:text-center md:w-1/5 md:h-full md:m-auto md:gap-6 pt-10 md:pt-40 px-6">
         <div>
           <h1 className=" font-light text-darkBackground  text-3xl">
             <span className=" font-bold text-accentRed text-3xl">Bok </span>
             {user?.name}!
           </h1>
-          <p>Hello profile page</p>
+
+          {data?.saldo ? (
+            <p className=" font-bold py-2">
+              Balance:{" "}
+              <span className=" font-normal"> {formatPrice(data?.saldo)}</span>
+            </p>
+          ) : (
+            <p className=" font-light">{error}</p>
+          )}
         </div>
         <center>
           <LogoutButton>
@@ -48,7 +59,7 @@ const ProfilePageComponent = async () => {
         </center>
       </aside>
       <section className="w-full md:w-3/4">
-        <UpdateInfoForm data={user} />
+        <UpdateInfoForm data={user} userId={user.id} />
       </section>
       <center>
         <LogoutButton>

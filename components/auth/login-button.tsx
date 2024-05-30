@@ -2,8 +2,9 @@
 import React from "react";
 
 import { useRouter } from "next/navigation";
+import { ButtonProps } from "../ui/button";
 
-interface LoginButtonProps {
+interface LoginButtonProps extends ButtonProps {
   children: React.ReactNode;
   mode?: "modal" | "redirect";
   asChild?: boolean;

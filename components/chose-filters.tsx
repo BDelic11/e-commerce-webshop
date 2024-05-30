@@ -45,7 +45,7 @@ ChooseFiltersProps) => {
     },
   });
   if (!filters) {
-    return <p>Nema filterarara</p>;
+    return <p>Nema filtera</p>;
   }
 
   return (

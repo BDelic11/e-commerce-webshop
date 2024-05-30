@@ -16,6 +16,7 @@ import CustomDialog from "./ui/custom-dialog";
 import AddReviewForm from "./add-review-form";
 import { getReview } from "@/actions/reviews";
 import Image from "next/image";
+import RatingStars from "./ui/rating-stars";
 
 interface DescriptionAndDetailSectionProps {
   product: Product;
@@ -24,9 +25,13 @@ interface DescriptionAndDetailSectionProps {
 const DescriptionAndDetailSection = async ({
   product,
 }: DescriptionAndDetailSectionProps) => {
-  const { reviews } = await getReview(product.id);
+  const { reviews, error } = await getReview(product.id);
   if (!reviews) {
     return <p>Nema komentara</p>;
+  }
+
+  if (error) {
+    return <p>Error</p>;
   }
 
   return (
@@ -46,25 +51,23 @@ const DescriptionAndDetailSection = async ({
           <AccordionTrigger>Komentari</AccordionTrigger>
           <AccordionContent>
             <CustomDialog header="Vaš komentar" trigger="Dodaj komentar">
-              <AddReviewForm />
+              <AddReviewForm productId={product.id} />
             </CustomDialog>
             {reviews.map((review) => (
-              <div className="flex flex-col justify-center align-middle md:p-2 md:my-6 md:rounded-xl bg-hoverButton  ">
+              <div
+                key={review.id}
+                className="flex flex-col justify-center align-middle md:p-4 md:my-6 md:rounded-xl bg-gray-100  "
+              >
                 <div className="flex flex-row gap-1 justify-between align-middle">
-                  <div className="flex flex-row gap-1 justify-center align-middle">
-                    <Image height={20} width={20} alt="star" src={star} />
-                    <Image height={20} width={20} alt="star" src={star} />
-                    <Image height={20} width={20} alt="star" src={star} />
-                    <Image height={20} width={20} alt="star" src={star} />
-                    <Image height={20} width={20} alt="star" src={star} />
-                  </div>
-                  <p>
-                    {review.createdAt.getDate()}.{review.createdAt.getMonth()}.
+                  <RatingStars rating={review.rating} />
+                  <p className=" text-softGreen">
+                    {review.user.username} - {review.createdAt.getDate()}.
+                    {review.createdAt.getMonth()}.
                     {review.createdAt.getFullYear()}
                   </p>
                 </div>
                 <p className="md:py-4">{review.comment}</p>
-                <p className="md:py-4">{review.user.username}</p>
+
                 <p className="md:py-4">{review.rating} / 5 stars</p>
               </div>
             ))}

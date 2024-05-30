@@ -3,7 +3,7 @@ import React from "react";
 
 interface OnSalePriceDisplayProps {
   originalPrice: number;
-  salePrice: number;
+  salePrice: number | null;
 }
 
 const OnSalePriceDisplay = ({

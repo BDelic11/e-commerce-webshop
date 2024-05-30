@@ -43,7 +43,7 @@ export const incrementProductQuantity = async ({
         cartId: cart.id,
         productId,
         quantity: 1,
-        price,
+        price: price,
         color,
       },
     });
@@ -76,7 +76,7 @@ const getCartIdByUser = async (userId: string) => {
   }
 };
 
-//------------------------------------ ADD TO CART ------------------------------------
+//------------------------------------ ADD TO CART -----------------------------------
 
 export const addToCart = async (values: z.infer<typeof CartItemSchema>) => {
   const validatedFields = CartItemSchema.safeParse(values);

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useTransition } from "react";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,25 +23,43 @@ import {
 import { Button } from "../ui/button";
 import { register } from "@/actions/register";
 import { updateUser } from "@/actions/update-user-infp";
+import toast from "react-hot-toast";
 
 interface UpdateInfoFormProps {
   data: User;
+  userId: string;
 }
 
-const UpdateInfoForm = ({ data }: UpdateInfoFormProps) => {
+const UpdateInfoForm = ({ data, userId }: UpdateInfoFormProps) => {
+  const [isPending, startTransition] = useTransition();
+
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
       email: data?.email,
       password: "********",
       name: data?.name,
-      surname: data?.surname,
+      // surname: data?.surname,
+      // username: data.username,
     },
   });
 
   const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
-    updateUser(values, data?.email);
+    startTransition(() => {
+      updateUser(values, userId).then((data) => {
+        if (data.error) {
+          toast(data.error);
+        }
+        if (data.success) {
+          toast("Uspješno ste se promijenili vaše informacije.");
+        }
+      });
+    });
   };
+
+  if (isPending) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <CardWrapper
@@ -69,7 +87,7 @@ const UpdateInfoForm = ({ data }: UpdateInfoFormProps) => {
                 </FormItem>
               )}
             ></FormField>
-            {/* <FormField
+            <FormField
               control={form.control}
               name="surname"
               render={({ field }) => (
@@ -85,8 +103,8 @@ const UpdateInfoForm = ({ data }: UpdateInfoFormProps) => {
                   <FormMessage />
                 </FormItem>
               )}
-            ></FormField> */}
-            {/* <FormField
+            ></FormField>
+            <FormField
               control={form.control}
               name="username"
               render={({ field }) => (
@@ -102,8 +120,8 @@ const UpdateInfoForm = ({ data }: UpdateInfoFormProps) => {
                   <FormMessage />
                 </FormItem>
               )}
-            ></FormField> */}
-            {/* <FormField
+            ></FormField>
+            <FormField
               control={form.control}
               name="email"
               render={({ field }) => (
@@ -136,12 +154,11 @@ const UpdateInfoForm = ({ data }: UpdateInfoFormProps) => {
                   <FormMessage />
                 </FormItem>
               )}
-            ></FormField> */}
+            ></FormField>
           </div>
           <Button variant="default" size="lg" type="submit" className="w-full">
             Spremi podatke
           </Button>
-          {data.email} {data.name}
         </form>
       </Form>
     </CardWrapper>

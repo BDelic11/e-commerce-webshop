@@ -18,7 +18,12 @@ const config = {
       },
     },
     extend: {
+      fontFamily: {
+        lora: ["var(--font-lora)"],
+        roboto_slab: ["var(--font-roboto_slab)"],
+      },
       colors: {
+        landingBackground: "#F4EDE4",
         navbarTextColor: "white",
         activeButton: "#3A3A3C",
         hoverButton: "#48484A",

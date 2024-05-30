@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState, useTransition } from "react";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -21,8 +21,18 @@ import {
 } from "@/components/ui/form";
 import { Button } from "../ui/button";
 import { register } from "@/actions/register";
+import FormError from "../form-error";
+import FormSuccess from "../form-success";
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { login } from "@/actions/login";
 
 const RegisterForm = () => {
+  const [error, setError] = useState<string | undefined>("");
+  const [success, setSuccess] = useState<string | undefined>("");
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof RegisterSchema>>({
     resolver: zodResolver(RegisterSchema),
     defaultValues: {
@@ -35,7 +45,20 @@ const RegisterForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof RegisterSchema>) => {
-    register(values);
+    setError("");
+    setSuccess("");
+
+    startTransition(() => {
+      register(values).then((data) => {
+        if (data.error) {
+          setError(data?.error);
+        }
+        if (data.success) {
+          router.push("/auth/login");
+          toast("Uspješno ste se registrirali");
+        }
+      });
+    });
   };
 
   return (
@@ -135,6 +158,8 @@ const RegisterForm = () => {
               )}
             ></FormField>
           </div>
+          <FormError message={error} />
+          <FormSuccess message={success} />
           <Button variant="default" size="lg" type="submit" className="w-full">
             Registriraj se
           </Button>

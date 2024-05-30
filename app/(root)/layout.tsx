@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Lato } from "next/font/google";
+import { Lora } from "next/font/google";
+import { Roboto_Slab } from "next/font/google";
 
 import "../globals.css";
 
@@ -12,6 +14,11 @@ import ToastProvider from "@/providers/toast-provider";
 
 // const lato = Lato({weight:["100	"], subsets: ["latin"]});
 const inter = Inter({ subsets: ["latin"] });
+const lora = Lora({ subsets: ["latin"], variable: "--font-lora" });
+const roboto_Slab = Roboto_Slab({
+  subsets: ["latin"],
+  variable: "--font-roboto_slab",
+});
 
 export const metadata: Metadata = {
   title: "Kutak Topline",
@@ -29,7 +36,9 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <html lang="en">
-        <body className={inter.className}>
+        <body
+          className={`${inter.className} ${lora.variable} ${roboto_Slab.variable}`}
+        >
           {" "}
           <ToastProvider />
           <Navbar />

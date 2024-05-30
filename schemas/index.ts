@@ -7,7 +7,18 @@ export const ProductCategories = z.enum([
   "SVE",
 ]);
 
-//LOGIN
+export const OrderStatus = z.enum([
+  "PENDING",
+  "SHIPPED",
+  "DELIVERED",
+  "CANCELLED",
+]);
+
+const requiredField = "Ovo polje je obavezno";
+const minChar = "Ovo polje mora imati minimalno";
+const maxChar = "Prekoračen maksimalni broj znakova.";
+
+// ------------------------ LOGIN ------------------------
 
 export const LoginSchema = z.object({
   email: z.string().email({
@@ -18,7 +29,7 @@ export const LoginSchema = z.object({
   }),
 });
 
-//REGISTER
+// ------------------------ REGISTER ------------------------
 
 export const RegisterSchema = z.object({
   email: z.string().email({
@@ -38,7 +49,7 @@ export const RegisterSchema = z.object({
   }),
 });
 
-//PRODUCT
+// ------------------------ PRODUCT ------------------------
 
 export const ProductBaseSchema = z.object({
   name: z.string().min(1, {
@@ -61,7 +72,7 @@ export const ProductBaseSchema = z.object({
   }),
 });
 
-//PRODUCT EXTENDED
+// ------------------------ PRODUCT EXTENDED ------------------------
 
 export const ProductOnSaleSchema = ProductBaseSchema.extend({
   salePercentage: z
@@ -92,7 +103,7 @@ export const ProductOnSaleSchema = ProductBaseSchema.extend({
   }
 );
 
-// add-to-cart-schema
+// ------------------------ ADD TO CART ------------------------
 
 export const CartItemSchema = z.object({
   productId: z.string().min(1, {
@@ -109,25 +120,101 @@ export const CartItemSchema = z.object({
   }),
 });
 
-// model Cart{
-//   id        String              @id @default(cuid())
-//   userId    String
-//   user      User            @relation(fields: [userId], references: [id])
-//   createdAt DateTime        @default(now())
-//   updatedAt DateTime        @default(now())
-//   items     CartItem[]
-//   status    CartStatus      @default(ACTIVE)
+// ------------------------ ADD REVIEW  ------------------------
 
-// }
+export const AddReviewSchema = z.object({
+  comment: z
+    .string()
+    .min(5, {
+      message: "Komentar mora imate minimalno 5 znakova.",
+    })
+    .max(160, {
+      message: "Komentar moze imate maksimalno 160 znakova.",
+    }),
+  rating: z
+    .number()
+    .min(1, {
+      message: "Minimalna ocijena je 1",
+    })
+    .max(5, { message: "Maksimalna ocijena je 5" }),
+});
 
-// model CartItem {
-//   id         String              @id @default(cuid())
-//   cart        Cart                @relation(fields: [cartId], references: [id])
-//   cartId      String
-//   product     Product             @relation(fields: [productId], references: [id])
-//   productId   String
-//   addedAt     DateTime            @default(now())
-//   quantity    Int
-//   price       Float
-//   color       String
-// }
+// ------------------------ CREATE PURCHASE  ------------------------
+
+export const CreatePurchase = z.object({
+  comment: z
+    .string()
+    .min(5, {
+      message: "Komentar mora imate minimalno 5 znakova.",
+    })
+    .max(160, {
+      message: "Komentar moze imate maksimalno 160 znakova.",
+    }),
+  rating: z
+    .number()
+    .min(1, {
+      message: "Minimalna ocijena je 1",
+    })
+    .max(5, { message: "Maksimalna ocijena je 5" }),
+});
+
+// ------------------------ ORDER ITEM SCHEMA  ------------------------
+
+export const OrderItemSchema = z.object({
+  productId: z.string().min(1, {
+    message: "Mora postojati id produkta.",
+  }),
+  priceAtPurchase: z.number().min(1, { message: "Cijena nemože biti 0." }),
+  quantity: z.number().min(1, { message: "Mora biti barem jedan." }),
+});
+
+// ------------------------ ORDER SCHEMA  ------------------------
+
+export const OrderSchema = z.object({
+  userId: z.string().min(1, {
+    message: "Mora postojati user ID",
+  }),
+  totalPrice: z.number().min(1, { message: "Cijena nemože biti 0." }),
+  delivery: z
+    .number()
+    .min(0, { message: "Greška sa dostavom. Ne može biti negativna." }),
+  orderItems: z.array(OrderItemSchema),
+});
+
+// ------------------------ ORDER SCHEMA  ------------------------
+
+export const CheckoutInfoSchema = z.object({
+  city: z.string(),
+  country: z
+    .string({ required_error: requiredField })
+    .min(1, {
+      message: minChar + " 1 znak",
+    })
+    .max(30, {
+      message: maxChar + " (30)",
+    }),
+  postalCode: z
+    .string({ required_error: requiredField })
+    .min(1, {
+      message: minChar + " 1 znak",
+    })
+    .max(30, {
+      message: maxChar + " (30)",
+    }),
+  address: z
+    .string({ required_error: requiredField })
+    .min(1, {
+      message: minChar + " 1 znak",
+    })
+    .max(30, {
+      message: maxChar + " (30)",
+    }),
+  phoneNumber: z
+    .string({ required_error: requiredField })
+    .min(12, {
+      message: "Broj mobitela ima min 12 znakova.",
+    })
+    .max(14, {
+      message: "Broj mobitela ima max 14 znakova.",
+    }),
+});

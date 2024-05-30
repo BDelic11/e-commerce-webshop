@@ -4,8 +4,11 @@ export const publicRoutes = [
   "/",
   "/profile",
   "/products",
+  "/cart",
   "/products/:productId",
   "/products(.*)",
+  "/cart/:cartId",
+  "/cart(.*)",
 ];
 
 /* An array of routes that are used for authentification

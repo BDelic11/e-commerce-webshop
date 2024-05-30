@@ -8,11 +8,11 @@ export default async function AdminPage() {
 
   if (role !== "ADMIN") {
     return (
-      <>
-        {console.log(role)}
-        <p> {JSON.stringify(role)}</p>
+      <div className="pl-80 w-auto m-auto">
+        {/* {console.log(role)} */}
+        {/* <p className="m-auto"> {JSON.stringify(role)}</p> */}
         <FormError message="Niste admin, nemate pravo na ovu stranicu." />
-      </>
+      </div>
     );
   }
 

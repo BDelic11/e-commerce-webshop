@@ -17,13 +17,14 @@ import ChooseFilters from "@/components/chose-filters";
 //data
 import { filters } from "@/data/filters";
 import filter from "@/public/icons/settings vertical.svg";
+import { Product } from "@/types/product";
+import { Skeleton } from "@/components/ui/skeleton";
 
-const ProductsPageComponent = () => {
-  const [toggleFilter, setToggleFilter] = useState(false);
-  const [products, setProducts] = useState([]);
-  const [loadingProducts, setLoadingProducts] = useState(true);
+const ProductsPageComponent: React.FC = () => {
+  const [toggleFilter, setToggleFilter] = useState<boolean>(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState<boolean>(true);
 
-  /* TODO ONLOADING BUG FIRST SHOWS PROIZVOD NULA KAD IH TEK UCITA TEK ONDA IH ISPISE  */
   useEffect(() => {
     const fetchProducts = async () => {
       const { products } = await getProducts();
@@ -36,7 +37,18 @@ const ProductsPageComponent = () => {
     fetchProducts();
   }, [setProducts]);
   if (loadingProducts) {
-    return <p>Loading...</p>;
+    return (
+      // TODO: CHANGE LOADING ANIMATION
+      <div className="flex flex-col h-full w-full md:px-24 md:pt-12  space-x-4">
+        <Skeleton className=" h-10 w-44 rounded-sm bg-gradient-to-r from-gray-100 to-gray-200  animate-pulse" />
+
+        <div className="flex flex-row md:gap-6 md:mt-10 ">
+          <Skeleton className=" h-96 w-96 bg-gradient-to-r from-gray-100 to-gray-200 rounded-sm animate-pulse" />
+          <Skeleton className="h-96 w-96 bg-gradient-to-r from-gray-100 to-gray-200 rounded-sm animate-pulse" />
+          <Skeleton className="h-96 w-96 bg-gradient-to-r from-gray-100 to-gray-200 rounded-sm animate-pulse" />
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -44,15 +56,13 @@ const ProductsPageComponent = () => {
       {/* TODO FILTER CONTAINER (LEFT ON DESKTOP FROM PRODUCTS SHOW/UNSHOW) */}
       <div className="flex flex-row">
         {toggleFilter && (
-          <>
-            <aside className="hidden lg:block file:filters md:px-4 md:pt-10 md:w-1/4 transition-all duration-300">
-              <FilterAccordions
-                action={(filters) => getProductsByFilter}
-                filters={filters}
-                setProducts={setProducts}
-              />
-            </aside>
-          </>
+          <aside className="hidden lg:px-10 lg:block file:filters md:px-4 md:pt-10 md:w-1/4 transition-all duration-300">
+            <FilterAccordions
+              action={(filters) => getProductsByFilter}
+              filters={filters}
+              setProducts={setProducts}
+            />
+          </aside>
         )}
         <div className="flex flex-col">
           <div className="flex flex-row justify-between align-end  ">
