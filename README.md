@@ -1,3 +1,20 @@
+Hello everyone!
+
+WHAT IS IT ABOUT?
+This is my latest project i have been working on. I used newest technologies to help me develop this web aplication of a web shop. I have made this application for 
+my final work on a 3rd year on FESB Croatia Faculty and also wanted to show my latest development skills. I first time used Prisma database with Supabase and
+newest Server Actions on a project and i liked its implementation. I integrated it with Next.js, framework based on React and shadcn for some basic UI components.
+I also used Custom Design of this project that i came up with in figma and think it suits the project.
+
+PROJECT DETAILS:
+Project is implementation of webshop, both with Client and Admin side. On client there are basic webshop functionalities like list of products, filter, loading 
+skeleton animations. There is also flow from clicking on a product that redirects you to dynamic product page with product image and info. Then a Add to cart 
+functionality with toaster for confirmation. Cart then gets filled with product cards and has delete option on those cards and Buy now button. Which is then 
+simplified for the faculty reason and do not have payment process but just a field in database called 'Wallet' that i use for compleating the purchase.
+
+I implemented: AUTHENTIFICATION AND AUTHORIZATION with both auth.js and middleware combined that helped me restrict users depending on their role, Zod is used 
+for VALIDATION on both backend and frontend, also error handling was done for everything.
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
